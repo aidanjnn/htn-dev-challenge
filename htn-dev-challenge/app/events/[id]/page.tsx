@@ -88,7 +88,9 @@ export default function EventDetailPage() {
     );
   }
 
-  const eventUrl = isLoggedIn && event.private_url ? event.private_url : event.public_url;
+  // public_url contains the video link, private_url is the private stream
+  // Use public_url when available, fall back to private_url when logged in
+  const eventUrl = event.public_url || (isLoggedIn ? event.private_url : null);
 
   return (
     <div className="mx-auto max-w-3xl px-4 pt-24 pb-16 sm:px-6">
@@ -107,13 +109,12 @@ export default function EventDetailPage() {
       <div className="mb-8">
         <div className="mb-3 flex flex-wrap items-center gap-2">
           <span
-            className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${
-              event.event_type === "workshop"
-                ? "bg-purple-900/40 text-purple-300"
-                : event.event_type === "tech_talk"
+            className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${event.event_type === "workshop"
+              ? "bg-purple-900/40 text-purple-300"
+              : event.event_type === "tech_talk"
                 ? "bg-blue-900/40 text-blue-300"
                 : "bg-green-900/40 text-green-300"
-            }`}
+              }`}
           >
             {formatEventType(event.event_type)}
           </span>

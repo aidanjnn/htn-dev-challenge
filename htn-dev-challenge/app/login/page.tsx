@@ -6,8 +6,7 @@ import { useAuth } from "@/context/AuthContext";
 
 /**
  * Dedicated login page — `/login`
- *
- * Design inspired by the UofTHacks portal login:
+ * Design thoughts:
  * - Full-screen dark background with a subtle cityscape-style gradient
  * - Centered glassmorphism card with username + password fields
  * - Cyan "Login" button matching the accent colour

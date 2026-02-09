@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Hack the North Events",
-  description: "Browse and explore Hack the North events",
+  title: "Hackathon Global Inc.™ Events",
+  description: "Browse and explore Hackathon Global Inc.™ events",
 };
 
 /**

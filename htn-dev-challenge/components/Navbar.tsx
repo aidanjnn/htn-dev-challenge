@@ -1,31 +1,83 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 
 /**
- * Floating pill-shaped navbar, centered at the top of the page.
+ * Floating pill-shaped navbar with two states:
  *
- * Layout (matching UofTHacks design):
- * - Logo / brand on the left
- * - Social icon links in the center
- * - "Visit Portal" (or "Log Out") on the right inside a rounded pill button
+ * 1. **Compact** (on hero) — logo, social icons, "log in :)" button
+ * 2. **Expanded** (scrolled past hero) — logo, page nav links, social icons,
+ *    year badge, "Visit Portal" / "Log Out" button
  *
- * The entire bar is wrapped in a rounded-full container with a subtle
- * white/10 border and glass-blur background.
+ * A scroll listener toggles between states at `window.innerHeight` (one
+ * full viewport = roughly the hero section height). The pill animates its
+ * width via CSS `transition` on max-width + padding.
  */
+
+/** Navigation links shown only in the expanded state.
+ *  Each href points to a section id anchor on the home page. */
+const NAV_LINKS = [
+  { label: "Schedule", href: "#schedule" },
+  { label: "FAQ", href: "#faq" },
+  { label: "Contact Us", href: "#contact" },
+];
+
 export default function Navbar() {
   const { isLoggedIn, logout } = useAuth();
+  const [expanded, setExpanded] = useState(false);
+
+  useEffect(() => {
+    function onScroll() {
+      // Expand once the user scrolls past the hero section
+      setExpanded(window.scrollY > window.innerHeight * 0.8);
+    }
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll(); // run once on mount in case page is already scrolled
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
     <nav className="fixed top-4 left-0 right-0 z-50 flex justify-center px-4">
-      <div className="flex items-center gap-6 rounded-full border border-white/10 bg-white/5 px-6 py-3 backdrop-blur-md sm:gap-8 sm:px-8">
-        {/* Logo — replace with an <img> or SVG when you have a real logo */}
+      <div
+        className={[
+          "flex items-center rounded-full border border-white/10 bg-white/5 py-3 backdrop-blur-md",
+          "transition-all duration-500 ease-in-out",
+          expanded ? "gap-6 px-8" : "gap-6 px-6 sm:gap-8 sm:px-8",
+        ].join(" ")}
+        style={{
+          maxWidth: expanded ? "960px" : "480px",
+          width: "100%",
+        }}
+      >
+        {/* Logo */}
         <Link href="/" className="shrink-0 text-lg font-bold tracking-tight text-white">
           HTN
         </Link>
 
-        {/* Social links — decorative icons matching the UofTHacks navbar */}
+        {/* ── Expanded-only: page navigation links ── */}
+        <div
+          className={[
+            "hidden items-center gap-5 overflow-hidden whitespace-nowrap transition-all duration-500 sm:flex",
+            expanded ? "max-w-[500px] opacity-100" : "max-w-0 opacity-0",
+          ].join(" ")}
+        >
+          {NAV_LINKS.map((link) => (
+            <a
+              key={link.label}
+              href={link.href}
+              className="text-sm font-medium text-white/70 transition-colors hover:text-white"
+            >
+              {link.label}
+            </a>
+          ))}
+          {/* Year badge */}
+          <span className="text-sm font-medium text-white/70">2025</span>
+        </div>
+
+        {/* Social icons — always visible on sm+ */}
         <div className="hidden items-center gap-4 sm:flex" aria-label="Social links">
           {/* LinkedIn */}
           <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="text-white/70 transition-colors hover:text-white">
@@ -66,7 +118,7 @@ export default function Navbar() {
             href="/login"
             className="shrink-0 rounded-full border border-white/20 px-5 py-1.5 text-sm font-medium text-white transition-all hover:bg-white/10"
           >
-            Visit Portal
+            {expanded ? "Visit Portal" : "log in :)"}
           </Link>
         )}
       </div>

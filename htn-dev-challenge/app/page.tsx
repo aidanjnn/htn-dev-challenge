@@ -1,13 +1,16 @@
 import HeroSection from "@/components/HeroSection";
 import Schedule from "@/components/Schedule";
+import FAQ from "@/components/FAQ";
+import ContactUs from "@/components/ContactUs";
 
 /**
  * Home page layout:
- * 1. Full-screen hero / landing section
- * 2. "Events Schedule" section with the calendar grid
+ * 1. Full-screen hero with typewriter title
+ * 2. Events Schedule (calendar grid)
+ * 3. Frequently Asked Questions (accordion)
+ * 4. Contact Us (cards)
  *
- * The hero provides the initial visual impact on first visit.
- * Scrolling down (or clicking "Explore Schedule") reveals the calendar.
+ * Each section has an id anchor so the navbar links scroll to it.
  */
 export default function Home() {
   return (
@@ -19,10 +22,13 @@ export default function Home() {
           Events Schedule
         </h2>
         <p className="mb-8 text-sm text-gray-400">
-          Find out all the information you&apos;ll need to know about Hack the North!
+          Find out all the information you&apos;ll need to know about Hackathon Global Inc.™!
         </p>
         <Schedule />
       </section>
+
+      <FAQ />
+      <ContactUs />
     </>
   );
 }

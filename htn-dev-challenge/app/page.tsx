@@ -1,18 +1,28 @@
-import EventList from "@/components/EventList";
+import HeroSection from "@/components/HeroSection";
+import Schedule from "@/components/Schedule";
 
 /**
- * Home page — renders the full event listing with search and filters.
+ * Home page layout:
+ * 1. Full-screen hero / landing section
+ * 2. "Events Schedule" section with the calendar grid
+ *
+ * The hero provides the initial visual impact on first visit.
+ * Scrolling down (or clicking "Explore Schedule") reveals the calendar.
  */
 export default function Home() {
   return (
     <>
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold tracking-tight">Events</h1>
-        <p className="mt-1 text-zinc-500 dark:text-zinc-400">
-          Browse all Hack the North events
+      <HeroSection />
+
+      <section id="schedule" className="mx-auto max-w-7xl px-4 py-16 sm:px-6">
+        <h2 className="mb-1 text-2xl font-bold text-white">
+          Events Schedule
+        </h2>
+        <p className="mb-8 text-sm text-gray-400">
+          Find out all the information you&apos;ll need to know about Hack the North!
         </p>
-      </div>
-      <EventList />
+        <Schedule />
+      </section>
     </>
   );
 }

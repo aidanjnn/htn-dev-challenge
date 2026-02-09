@@ -1,8 +1,23 @@
 @import "tailwindcss";
 
+/**
+ * Global theme configuration.
+ * The app uses a single flat dark background (#252525) everywhere.
+ * All colour tokens are defined here so redesigning is a single-file change.
+ */
+
 :root {
-  --background: #fafafa;
-  --foreground: #171717;
+  --background: #252525;
+  --foreground: #ededed;
+  --foreground-muted: #9ca3af;
+  --accent: #7dd3fc;
+  --accent-hover: #38bdf8;
+  --border: rgba(255, 255, 255, 0.08);
+
+  /* Calendar card colours — one per event type, easy to extend */
+  --card-workshop: #4a6741;
+  --card-tech-talk: #6b5b7b;
+  --card-activity: #4a6d5a;
 }
 
 @theme inline {
@@ -12,15 +27,28 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
-  background: var(--background);
+  background: #252525;
   color: var(--foreground);
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #252525;
+}
+::-webkit-scrollbar-thumb {
+  background: #444;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }

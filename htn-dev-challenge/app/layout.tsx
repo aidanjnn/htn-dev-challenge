@@ -21,9 +21,11 @@ export const metadata: Metadata = {
 
 /**
  * Root layout — wraps the entire app with:
- * - AuthProvider for login state
- * - Navbar for navigation
- * - Responsive container
+ * - AuthProvider for login state across all pages
+ * - Navbar (fixed, overlays hero)
+ *
+ * No padding/max-width here — each page controls its own spacing
+ * since the hero is full-bleed while other sections are contained.
  */
 export default function RootLayout({
   children,
@@ -37,9 +39,7 @@ export default function RootLayout({
       >
         <AuthProvider>
           <Navbar />
-          <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
-            {children}
-          </main>
+          {children}
         </AuthProvider>
       </body>
     </html>

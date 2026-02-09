@@ -6,15 +6,15 @@ import Typewriter from "./Typewriter";
  * Full-screen hero / landing section.
  *
  * Features:
- * - Animated gradient background with subtle color shifts
- * - Gradient text on title
+ * - Flat dark background matching the schedule page
+ * - White title color
  * - Staggered fade-in-up animations for content
  * - Interactive button with glow effect
  * - Animated gradient orb for visual interest
  */
 export default function HeroSection() {
   return (
-    <section className="animated-gradient-bg relative flex min-h-screen flex-col items-start justify-center px-6 sm:px-12 lg:px-24 overflow-hidden">
+    <section className="relative flex min-h-screen flex-col items-start justify-center px-6 sm:px-12 lg:px-24 overflow-hidden bg-[#252525]">
       {/* Animated gradient orb */}
       <div
         className="pointer-events-none absolute right-10 top-1/4 sm:right-20 lg:right-32 animated-orb"
@@ -55,10 +55,8 @@ export default function HeroSection() {
           January 2021 | better than hack___
         </p>
 
-        <h1 className="fade-in-up fade-in-up-2 mb-6 text-5xl font-extrabold leading-tight tracking-tight sm:text-7xl">
-          <span className="gradient-text">
-            <Typewriter text="Hackathon Global Inc.™" speed={100} startDelay={400} />
-          </span>
+        <h1 className="fade-in-up fade-in-up-2 mb-6 text-5xl font-extrabold leading-tight tracking-tight sm:text-7xl text-white">
+          <Typewriter text="Hackathon Global Inc.™" speed={100} startDelay={400} />
         </h1>
 
         <p className="fade-in-up fade-in-up-3 mb-8 max-w-md text-lg text-gray-400 sm:text-xl">

@@ -215,11 +215,10 @@ export default function Schedule() {
         <span className="text-sm font-medium text-gray-400">Filters:</span>
         <button
           onClick={() => setTypeFilter("all")}
-          className={`rounded-full border px-4 py-1 text-xs font-medium transition-all ${
-            typeFilter === "all"
+          className={`rounded-full border px-4 py-1 text-xs font-medium transition-all ${typeFilter === "all"
               ? "border-white/30 bg-white/10 text-white"
               : "border-white/10 text-gray-400 hover:border-white/20 hover:text-gray-200"
-          }`}
+            }`}
         >
           All
         </button>
@@ -227,11 +226,10 @@ export default function Schedule() {
           <button
             key={type}
             onClick={() => setTypeFilter(type)}
-            className={`rounded-full border px-4 py-1 text-xs font-medium transition-all ${
-              typeFilter === type
+            className={`rounded-full border px-4 py-1 text-xs font-medium transition-all ${typeFilter === type
                 ? "border-white/30 bg-white/10 text-white"
                 : "border-white/10 text-gray-400 hover:border-white/20 hover:text-gray-200"
-            }`}
+              }`}
           >
             {formatEventType(type)}
           </button>
@@ -338,9 +336,8 @@ export default function Schedule() {
                         {/* Card content */}
                         <Link
                           href={isBlurred ? "/login" : `/events/${evt.id}`}
-                          className={`flex h-full flex-col justify-between p-2 text-white transition-all hover:brightness-110 ${
-                            isBlurred ? "select-none blur-[6px]" : ""
-                          }`}
+                          className={`flex h-full flex-col justify-between p-2 text-white transition-all hover:brightness-110 ${isBlurred ? "select-none blur-[6px]" : ""
+                            }`}
                           style={{ backgroundColor: bg }}
                           tabIndex={isBlurred ? -1 : undefined}
                           aria-label={isBlurred ? "Log in to view this private event" : evt.name}
@@ -349,10 +346,10 @@ export default function Schedule() {
                             <p className="text-xs font-semibold leading-tight">
                               {evt.name}
                             </p>
-                            {/* Show description snippet if card is tall enough */}
-                            {height > 60 && evt.description && (
-                              <p className="mt-0.5 line-clamp-2 text-[10px] leading-tight text-white/70">
-                                {evt.description}
+                            {/* Show brief description only on tall cards */}
+                            {height > 100 && evt.description && (
+                              <p className="mt-0.5 line-clamp-1 text-[10px] leading-tight text-white/60">
+                                {evt.description.slice(0, 50)}...
                               </p>
                             )}
                           </div>

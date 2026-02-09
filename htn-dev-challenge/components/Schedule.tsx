@@ -134,7 +134,7 @@ export default function Schedule() {
       result = result.filter(
         (e) =>
           e.name.toLowerCase().includes(q) ||
-          e.description.toLowerCase().includes(q)
+          e.description?.toLowerCase().includes(q)
       );
     }
 

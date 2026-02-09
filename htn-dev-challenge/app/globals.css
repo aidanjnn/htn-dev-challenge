@@ -67,3 +67,151 @@ html {
 .animate-bouncy {
   animation: bouncy 1.4s infinite;
 }
+
+/* Animated gradient background */
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animated-gradient-bg {
+  background: linear-gradient(
+    -45deg,
+    #252525,
+    #1a2a3a,
+    #2a1a3a,
+    #1a3a2a,
+    #252525
+  );
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(
+    135deg,
+    #7dd3fc 0%,
+    #a78bfa 25%,
+    #f472b6 50%,
+    #fb923c 75%,
+    #7dd3fc 100%
+  );
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientShift 8s ease infinite;
+}
+
+/* Enhanced button hover with glow */
+.btn-glow {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.btn-glow::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(135deg, #7dd3fc, #a78bfa, #f472b6);
+  border-radius: inherit;
+  opacity: 0;
+  z-index: -1;
+  filter: blur(12px);
+  transition: opacity 0.3s ease;
+}
+
+.btn-glow:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 30px rgba(125, 211, 252, 0.5);
+}
+
+.btn-glow:hover::before {
+  opacity: 0.7;
+}
+
+/* Staggered fade-in-up animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-up {
+  opacity: 0;
+  animation: fadeInUp 0.8s ease forwards;
+}
+
+.fade-in-up-1 {
+  animation-delay: 0.1s;
+}
+
+.fade-in-up-2 {
+  animation-delay: 0.3s;
+}
+
+.fade-in-up-3 {
+  animation-delay: 0.5s;
+}
+
+.fade-in-up-4 {
+  animation-delay: 0.7s;
+}
+
+/* Animated floating glow */
+@keyframes floatGlow {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateY(-20px) scale(1.1);
+    opacity: 0.8;
+  }
+}
+
+.animate-float-glow {
+  animation: floatGlow 6s ease-in-out infinite;
+}
+
+/* Rotating gradient orb */
+@keyframes rotateOrb {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulseOrb {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+}
+
+.animated-orb {
+  animation: pulseOrb 4s ease-in-out infinite;
+}
+
+.animated-orb-inner {
+  animation: rotateOrb 20s linear infinite;
+}

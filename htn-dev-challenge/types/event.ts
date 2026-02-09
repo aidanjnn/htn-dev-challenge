@@ -24,12 +24,12 @@ export interface HTNEvent {
   id: number;
   name: string;
   event_type: EventType;
-  permission: Permission;
+  permission?: Permission;
   start_time: number; // Unix timestamp in milliseconds
   end_time: number;
-  description: string;
+  description?: string;
   speakers: Speaker[];
-  public_url: string;
+  public_url?: string;
   private_url: string;
   related_events: number[];
 }

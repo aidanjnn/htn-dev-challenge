@@ -24,6 +24,13 @@ const TYPE_COLORS: Record<string, string> = {
   activity: "#4a6d5a",
 };
 
+/** Bright border accent colors for left border, keyed by event_type. */
+const TYPE_BORDER_COLORS: Record<string, string> = {
+  workshop: "#22c55e",   // green
+  tech_talk: "#a855f7",  // purple
+  activity: "#3b82f6",   // blue
+};
+
 /* ------------------------------------------------------------------ */
 /*  Helper functions                                                   */
 /* ------------------------------------------------------------------ */
@@ -216,8 +223,8 @@ export default function Schedule() {
         <button
           onClick={() => setTypeFilter("all")}
           className={`rounded-full border px-4 py-1 text-xs font-medium transition-all ${typeFilter === "all"
-              ? "border-white/30 bg-white/10 text-white"
-              : "border-white/10 text-gray-400 hover:border-white/20 hover:text-gray-200"
+            ? "border-white/30 bg-white/10 text-white"
+            : "border-white/10 text-gray-400 hover:border-white/20 hover:text-gray-200"
             }`}
         >
           All
@@ -227,8 +234,8 @@ export default function Schedule() {
             key={type}
             onClick={() => setTypeFilter(type)}
             className={`rounded-full border px-4 py-1 text-xs font-medium transition-all ${typeFilter === type
-                ? "border-white/30 bg-white/10 text-white"
-                : "border-white/10 text-gray-400 hover:border-white/20 hover:text-gray-200"
+              ? "border-white/30 bg-white/10 text-white"
+              : "border-white/10 text-gray-400 hover:border-white/20 hover:text-gray-200"
               }`}
           >
             {formatEventType(type)}
@@ -330,15 +337,17 @@ export default function Schedule() {
                     return (
                       <div
                         key={evt.id}
-                        className="absolute left-1 right-1 overflow-hidden rounded-md"
+                        className="absolute left-1 right-1 overflow-hidden rounded-md transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(0,0,0,0.3)] hover:z-10"
                         style={{ top, height, minHeight: 36 }}
                       >
-                        {/* Card content */}
+                        {/* Card content with colorful left border */}
                         <Link
                           href={isBlurred ? "/login" : `/events/${evt.id}`}
-                          className={`flex h-full flex-col justify-between p-2 text-white transition-all hover:brightness-110 ${isBlurred ? "select-none blur-[6px]" : ""
-                            }`}
-                          style={{ backgroundColor: bg }}
+                          className={`flex h-full flex-col justify-between p-2 pl-3 text-white transition-all hover:brightness-110 ${isBlurred ? "select-none blur-[6px]" : ""}`}
+                          style={{
+                            backgroundColor: bg,
+                            borderLeft: `4px solid ${TYPE_BORDER_COLORS[evt.event_type] ?? "#60a5fa"}`,
+                          }}
                           tabIndex={isBlurred ? -1 : undefined}
                           aria-label={isBlurred ? "Log in to view this private event" : evt.name}
                         >

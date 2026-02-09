@@ -67,7 +67,7 @@ export default function HeroSection() {
           href="#schedule"
           className="fade-in-up fade-in-up-4 btn-glow inline-block rounded-full bg-[var(--accent)] px-8 py-3 text-sm font-semibold text-[#252525] hover:bg-[var(--accent-hover)]"
         >
-          Explore Schedule
+          hurry to the next event !!!
         </a>
       </div>
     </section>

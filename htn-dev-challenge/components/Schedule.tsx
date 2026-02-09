@@ -106,6 +106,8 @@ export default function Schedule() {
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState<EventType | "all">("all");
+  const [viewMode, setViewMode] = useState<"calendar" | "list">("calendar");
+  const [selectedDayIndex, setSelectedDayIndex] = useState(0);
 
   // Fetch events once on mount, sort by start_time
   useEffect(() => {
@@ -218,29 +220,54 @@ export default function Schedule() {
   return (
     <div>
       {/* ── Filter pills ── */}
-      <div className="mb-4 flex flex-wrap items-center gap-2">
-        <span className="text-sm font-medium text-gray-400">Filters:</span>
-        <button
-          onClick={() => setTypeFilter("all")}
-          className={`rounded-full border px-4 py-1 text-xs font-medium transition-all ${typeFilter === "all"
-            ? "border-white/30 bg-white/10 text-white"
-            : "border-white/10 text-gray-400 hover:border-white/20 hover:text-gray-200"
-            }`}
-        >
-          All
-        </button>
-        {EVENT_TYPES.map((type) => (
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="text-sm font-medium text-gray-400">Filters:</span>
           <button
-            key={type}
-            onClick={() => setTypeFilter(type)}
-            className={`rounded-full border px-4 py-1 text-xs font-medium transition-all ${typeFilter === type
+            onClick={() => setTypeFilter("all")}
+            className={`rounded-full border px-4 py-1 text-xs font-medium transition-all ${typeFilter === "all"
               ? "border-white/30 bg-white/10 text-white"
               : "border-white/10 text-gray-400 hover:border-white/20 hover:text-gray-200"
               }`}
           >
-            {formatEventType(type)}
+            All
           </button>
-        ))}
+          {EVENT_TYPES.map((type) => (
+            <button
+              key={type}
+              onClick={() => setTypeFilter(type)}
+              className={`rounded-full border px-4 py-1 text-xs font-medium transition-all ${typeFilter === type
+                ? "border-white/30 bg-white/10 text-white"
+                : "border-white/10 text-gray-400 hover:border-white/20 hover:text-gray-200"
+                }`}
+            >
+              {formatEventType(type)}
+            </button>
+          ))}
+        </div>
+        {/* View toggle */}
+        <div className="flex items-center gap-1 rounded-full border border-white/10 p-1">
+          <button
+            onClick={() => setViewMode("calendar")}
+            className={`rounded-full px-3 py-1 text-xs font-medium transition-all ${viewMode === "calendar"
+              ? "bg-white/10 text-white"
+              : "text-gray-400 hover:text-gray-200"
+              }`}
+            aria-label="Calendar view"
+          >
+            📅 Calendar
+          </button>
+          <button
+            onClick={() => setViewMode("list")}
+            className={`rounded-full px-3 py-1 text-xs font-medium transition-all ${viewMode === "list"
+              ? "bg-white/10 text-white"
+              : "text-gray-400 hover:text-gray-200"
+              }`}
+            aria-label="List view"
+          >
+            📋 List
+          </button>
+        </div>
       </div>
 
       {/* ── Search bar ── */}
@@ -270,7 +297,7 @@ export default function Schedule() {
       )}
 
       {/* ── Calendar grid ── */}
-      {dayKeys.length > 0 ? (
+      {viewMode === "calendar" && dayKeys.length > 0 && (
         <div className="overflow-x-auto rounded-lg border border-white/8">
           <div
             className="grid"
@@ -395,7 +422,91 @@ export default function Schedule() {
             })}
           </div>
         </div>
-      ) : (
+      )}
+
+      {/* ── List view ── */}
+      {viewMode === "list" && dayKeys.length > 0 && (
+        <div>
+          {/* Day navigation header */}
+          <div className="mb-6 flex items-center justify-center rounded-xl bg-[#7dd3fc] py-4">
+            <button
+              onClick={() => setSelectedDayIndex(Math.max(0, selectedDayIndex - 1))}
+              disabled={selectedDayIndex === 0}
+              className="px-4 text-2xl font-bold text-[#252525] transition-opacity disabled:opacity-30"
+              aria-label="Previous day"
+            >
+              ‹
+            </button>
+            <span className="px-8 text-xl font-bold text-[#252525]">
+              {dayKeys[selectedDayIndex] ? new Date(dayKeys[selectedDayIndex] + "T12:00:00").toLocaleDateString("en-US", { weekday: "long" }) : ""}
+            </span>
+            <button
+              onClick={() => setSelectedDayIndex(Math.min(dayKeys.length - 1, selectedDayIndex + 1))}
+              disabled={selectedDayIndex === dayKeys.length - 1}
+              className="px-4 text-2xl font-bold text-[#252525] transition-opacity disabled:opacity-30"
+              aria-label="Next day"
+            >
+              ›
+            </button>
+          </div>
+
+          {/* Event list */}
+          <div className="space-y-4">
+            {(dayGroups.get(dayKeys[selectedDayIndex]) ?? []).map((evt) => {
+              const bg = TYPE_COLORS[evt.event_type] ?? "#3a4a5a";
+              const borderColor = TYPE_BORDER_COLORS[evt.event_type] ?? "#60a5fa";
+              const isPrivate = evt.permission === "private";
+              const isBlurred = isPrivate && !isLoggedIn;
+
+              return (
+                <Link
+                  key={evt.id}
+                  href={isBlurred ? "/login" : `/events/${evt.id}`}
+                  className={`block rounded-xl p-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(0,0,0,0.3)] ${isBlurred ? "select-none blur-[6px]" : ""}`}
+                  style={{
+                    backgroundColor: bg,
+                    borderLeft: `5px solid ${borderColor}`,
+                  }}
+                >
+                  <div className="flex items-start justify-between">
+                    <h3 className="text-lg font-bold text-white">{evt.name}</h3>
+                    <button
+                      className="text-pink-400 transition-colors hover:text-pink-300"
+                      aria-label="Favorite event"
+                      onClick={(e) => e.preventDefault()}
+                    >
+                      <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                      </svg>
+                    </button>
+                  </div>
+
+                  <div className="mt-3 space-y-1 text-sm text-white/80">
+                    <p>
+                      <span className="text-pink-400">Time:</span>{" "}
+                      {formatTime(evt.start_time)} - {formatTime(evt.end_time)}
+                    </p>
+                    {evt.speakers && evt.speakers.length > 0 && (
+                      <p>
+                        <span className="text-pink-400">Host:</span>{" "}
+                        {evt.speakers.map((s) => s.name).join(", ")}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="mt-4 flex justify-end">
+                    <span className="rounded-md border border-white/20 px-3 py-1 text-xs font-medium uppercase tracking-wider text-white/60">
+                      View Details
+                    </span>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {dayKeys.length === 0 && (
         <p className="py-12 text-center text-gray-500">
           No events match your search.
         </p>
